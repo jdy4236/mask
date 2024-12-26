@@ -2,75 +2,93 @@
 
 .container {
     display: flex;
-    flex-direction: column;
-    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.chatContainer {
+    height: 500px;
+    /* 크기 수정 */
+    width: 400px;
+    /* 고정된 가로 크기 */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+    /* 외부 스크롤 비활성화 */
+    background: var(--background-gradient);
+    /* Houston 스타일 배경 */
+    box-shadow: var(--box-shadow);
+    /* 네온 효과 */
+    border: 2px solid var(--accent);
+    /* 보라색 테두리 */
+    border-radius: 12px;
 }
 
 .chatBox {
-    background-color: #f9f9f9;
-    padding: 16px;
-    border-radius: 8px;
-    height: 100%;
+    height: calc(100% - 60px);
+    /* 헤더와 푸터를 제외한 높이 */
     overflow-y: auto;
+    /* 내부 스크롤 활성화 */
+    scrollbar-width: thin;
+    /* 얇은 스크롤바 */
+    scrollbar-color: var(--secondary) transparent;
+}
+
+.chatBox::-webkit-scrollbar {
+    width: 8px;
+}
+
+.chatBox::-webkit-scrollbar-thumb {
+    background: var(--secondary);
+    border-radius: 4px;
 }
 
 .message {
-    margin-bottom: 12px;
-    padding: 8px 12px;
-    border-radius: 12px;
-    background-color: #e0e0e0;
-    max-width: 60%;
+    margin-bottom: 10px;
+    color: var(--foreground);
 }
 
 .ownMessage {
-    background-color: #4f93ff;
-    color: white;
-    align-self: flex-end;
+    text-align: right;
+    background-color: rgba(255, 255, 255, 0.1);
+    /* 반투명 배경 */
+    padding: 8px;
+    border-radius: 8px;
 }
 
 .nickname {
     font-weight: bold;
+    color: var(--accent);
 }
 
 .timestamp {
     font-size: 0.8em;
-    color: #555;
-}
-
-.userList {
-    width: 200px;
-    background-color: #ffffff;
-    padding: 16px;
-    border-left: 1px solid #ddd;
-    overflow-y: auto;
-}
-
-.userListTitle {
-    font-size: 1.2em;
-    margin-bottom: 8px;
-}
-
-.userItem {
-    padding: 4px 0;
-    border-bottom: 1px solid #eee;
+    color: gray;
 }
 
 .inputContainer {
     display: flex;
-    width: 100%;
+    background: var(--input-background);
+    padding: 10px;
+    border-radius: 10px;
 }
 
 .input {
     flex: 1;
-    padding: 12px;
-    border: 1px solid #ccc;
+    padding: 8px;
+    border: none;
+    background: var(--input-background);
+    color: var(--foreground);
     border-radius: 4px;
 }
 
 .button {
     margin-left: 8px;
-    padding: 12px 16px;
-    background-color: #4f93ff;
+    padding: 8px 16px;
+    background: var(--accent);
     color: white;
     border: none;
     border-radius: 4px;
@@ -78,5 +96,5 @@
 }
 
 .button:hover {
-    background-color: #4078c0;
+    background: var(--secondary);
 }

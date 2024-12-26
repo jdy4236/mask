@@ -9,8 +9,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// prisma/schema.prisma
-
 model User {
   id        Int       @id @default(autoincrement())
   nickname  String    @unique
@@ -18,19 +16,21 @@ model User {
   password  String
   createdAt DateTime  @default(now())
   messages  Message[] // User가 보낸 메시지
+  rooms     Room[]    @relation("UserRooms") // references 제거
 }
 
 model Room {
-  id          String    @id
-  name        String
-  category    String
-  isPrivate   Boolean   @default(false)
-  password    String?   // 비밀방일 경우 비밀번호
-  participantLimit Int?  // 참여자 수 제한
-  lifespan    Int?      // 수명 기간 (분 단위)
-  createdBy   Int
-  createdAt   DateTime  @default(now())
-  messages    Message[] // Room에 포함된 메시지
+  id                String    @id
+  name              String
+  category          String
+  isPrivate         Boolean   @default(false)
+  password          String?   // 비밀방일 경우 비밀번호
+  participantLimit  Int?      // 참여자 수 제한
+  lifespan          Int?      // 수명 기간 (분 단위)
+  createdBy         Int
+  createdAt         DateTime  @default(now())
+  messages          Message[] // Room에 포함된 메시지
+  creator           User      @relation("UserRooms", fields: [createdBy], references: [id])
 }
 
 model Message {

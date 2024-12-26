@@ -5,27 +5,32 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function Login() {
+export default function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const router = useRouter();
 
     const handleLogin = async () => {
-        const res = await fetch("/api/auth/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password }),
-        });
+        try {
+            const res = await fetch("/api/auth/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password }),
+            });
 
-        const data = await res.json();
+            const data = await res.json();
 
-        if (res.ok) {
-            // 토큰 저장 및 리다이렉트
-            localStorage.setItem("token", data.token);
-            router.push("/");
-        } else {
-            setError(data.error);
+            if (res.ok) {
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("nickname", data.nickname);
+                router.push("/dashboard");
+            } else {
+                setError(data.error);
+            }
+        } catch (err) {
+            console.error("Login error:", err);
+            setError("로그인 중 오류가 발생했습니다.");
         }
     };
 
@@ -35,23 +40,23 @@ export default function Login() {
             {error && <p className="text-red-500 mb-4">{error}</p>}
             <input
                 type="email"
-                placeholder="Email"
-                className="border p-2 rounded mb-4"
+                placeholder="이메일"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                className="border p-2 rounded mb-4 w-full max-w-sm"
             />
             <input
                 type="password"
-                placeholder="Password"
-                className="border p-2 rounded mb-4"
+                placeholder="비밀번호"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                className="border p-2 rounded mb-4 w-full max-w-sm"
             />
             <button
-                className="px-4 py-2 bg-blue-500 text-white rounded"
                 onClick={handleLogin}
+                className="px-4 py-2 bg-blue-500 text-white rounded w-full max-w-sm"
             >
-                Login
+                로그인
             </button>
         </div>
     );

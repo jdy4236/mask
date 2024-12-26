@@ -1,6 +1,6 @@
 // src/app/api/auth/register/route.js
 
-import prisma from '@/lib/prisma';
+import prisma from '@/lib/prisma.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
@@ -23,10 +23,10 @@ export async function POST(request) {
             },
         });
 
-        // JWT 생성
-        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        // JWT 생성 (nickname 포함)
+        const token = jwt.sign({ userId: user.id, nickname: user.nickname }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-        return new Response(JSON.stringify({ token }), { status: 201 });
+        return new Response(JSON.stringify({ token, nickname: user.nickname }), { status: 201 });
     } catch (error) {
         if (error.code === 'P2002') {
             return new Response(JSON.stringify({ error: 'Email or nickname already exists.' }), { status: 409 });

@@ -1,0 +1,108 @@
+/* src/app/styles/dashboard.module.css */
+
+/* 대시보드 전체 컨테이너 */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px;
+    background-color: #f0f4f8;
+    /* Light gray background */
+    min-height: 100vh;
+}
+
+/* 방 생성 섹션 */
+.roomCreation {
+    width: 100%;
+    max-width: 600px;
+    background-color: #ffffff;
+    /* White background */
+    padding: 24px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 24px;
+}
+
+/* 방 검색 섹션 */
+.roomSearch {
+    width: 100%;
+    max-width: 600px;
+    background-color: #ffffff;
+    /* White background */
+    padding: 24px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 24px;
+}
+
+/* 방 목록 섹션 */
+.roomList {
+    width: 100%;
+    max-width: 600px;
+    background-color: #ffffff;
+    /* White background */
+    padding: 24px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 각 방 항목 */
+.roomItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #e5e7eb;
+    /* Light border */
+}
+
+.roomItem:last-child {
+    border-bottom: none;
+}
+
+/* 방 삭제 버튼 */
+.deleteButton {
+    background-color: #ef4444;
+    /* Red background */
+    color: #ffffff;
+    /* White text */
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.deleteButton:hover {
+    background-color: #dc2626;
+    /* Darker red on hover */
+}
+
+/* 방 참여 버튼 */
+.joinButton {
+    background-color: #3b82f6;
+    /* Blue background */
+    color: #ffffff;
+    /* White text */
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.joinButton:hover {
+    background-color: #2563eb;
+    /* Darker blue on hover */
+}
+
+/* 에러 메시지 */
+.error {
+    color: #ef4444;
+    /* Red text */
+    text-align: center;
+    margin-bottom: 16px;
+    font-weight: bold;
+}
+
+/* 추가적인 클래스은 필요에 따라 여기에 작성하세요 */
