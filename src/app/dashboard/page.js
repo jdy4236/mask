@@ -220,7 +220,7 @@ export default function Dashboard() {
 
     const openChatWindow = (roomId, isPrivate) => {
         const url = `${window.location.origin}/chat?roomId=${encodeURIComponent(roomId)}&isPrivate=${isPrivate}`;
-        const windowFeatures = "width=800,height=600,left=200,top=100,resizable=yes,scrollbars=yes,status=yes";
+        const windowFeatures = "width=600,height=600,left=200,top=100,resizable=no,scrollbars=no,status=no"; // 가로 크기를 현재의 반으로 줄임
         window.open(url, `ChatRoom_${roomId}`, windowFeatures);
     };
 
@@ -230,31 +230,31 @@ export default function Dashboard() {
     }, []);
 
     return (
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col min-h-screen bg-gradient-main">
             <Navbar /> {/* 상단 메뉴 컴포넌트 추가 */}
-            <div className="p-6 bg-gray-100 flex-grow">
-                <h1 className="text-3xl font-bold mb-6 text-center">Dashboard</h1>
-                {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
+            <div className={`p-6 flex-grow ${styles.dashboardContainer}`}>
+                <h1 className="text-3xl font-bold mb-6 text-primary text-center">Dashboard</h1>
+                {error && <p className="text-error-color mb-4 text-center">{error}</p>}
 
                 {/* 방 생성 섹션 */}
-                <div className={`max-w-md mx-auto bg-white p-6 rounded shadow mb-6 ${styles.roomCreation}`}>
-                    <h2 className="text-xl font-semibold mb-4">새 방 생성</h2>
+                <div className={`${styles.roomCreation} bg-input-background`}>
+                    <h2 className="text-xl font-semibold mb-4 text-primary">새 방 생성</h2>
                     <input
                         type="text"
                         placeholder="방 이름"
-                        className="border p-2 rounded mb-4 w-full"
+                        className="border border-secondary p-2 rounded mb-4 w-full text-primary bg-background"
                         value={roomName}
                         onChange={(e) => setRoomName(e.target.value)}
                     />
                     <input
                         type="text"
                         placeholder="방 ID"
-                        className="border p-2 rounded mb-4 w-full"
+                        className="border border-secondary p-2 rounded mb-4 w-full text-primary bg-background"
                         value={roomId}
                         onChange={(e) => setRoomId(e.target.value)}
                     />
                     <select
-                        className="border p-2 rounded mb-4 w-full"
+                        className="border border-secondary p-2 rounded mb-4 w-full text-primary bg-background"
                         value={category}
                         onChange={(e) => setCategory(e.target.value)}
                     >
@@ -271,13 +271,13 @@ export default function Dashboard() {
                             onChange={(e) => setIsPrivate(e.target.checked)}
                             className="mr-2"
                         />
-                        <label htmlFor="isPrivate">비밀방</label>
+                        <label htmlFor="isPrivate" className="text-primary">비밀방</label>
                     </div>
                     {isPrivate && (
                         <input
                             type="password"
                             placeholder="비밀방 비밀번호"
-                            className="border p-2 rounded mb-4 w-full"
+                            className="border border-secondary p-2 rounded mb-4 w-full text-primary bg-background"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
@@ -285,7 +285,7 @@ export default function Dashboard() {
                     <input
                         type="number"
                         placeholder="참여자 수 제한 (선택 사항)"
-                        className="border p-2 rounded mb-4 w-full"
+                        className="border border-secondary p-2 rounded mb-4 w-full text-primary bg-background"
                         value={participantLimit}
                         onChange={(e) => setParticipantLimit(e.target.value)}
                     />
@@ -297,13 +297,13 @@ export default function Dashboard() {
                             onChange={(e) => setLifespan(e.target.checked ? "10" : "")}
                             className="mr-2"
                         />
-                        <label htmlFor="lifespan">방 수명 설정 (분)</label>
+                        <label htmlFor="lifespan" className="text-primary">방 수명 설정 (분)</label>
                     </div>
                     {lifespan !== "" && (
                         <input
                             type="number"
                             placeholder="수명 기간 (10분 단위)"
-                            className="border p-2 rounded mb-4 w-full"
+                            className="border border-secondary p-2 rounded mb-4 w-full text-primary bg-background"
                             value={lifespan}
                             onChange={(e) => setLifespan(e.target.value)}
                             step="10"
@@ -311,7 +311,7 @@ export default function Dashboard() {
                         />
                     )}
                     <button
-                        className="px-4 py-2 bg-blue-500 text-white rounded w-full"
+                        className="px-4 py-2 bg-button-background text-white rounded w-full hover:bg-button-hover shadow-neon"
                         onClick={handleCreateRoom}
                     >
                         방 생성
@@ -319,36 +319,36 @@ export default function Dashboard() {
                 </div>
 
                 {/* 방 검색 섹션 */}
-                <div className={`max-w-md mx-auto bg-white p-6 rounded shadow mb-6 ${styles.roomSearch}`}>
-                    <h2 className="text-xl font-semibold mb-4">방 검색</h2>
+                <div className={`${styles.roomSearch} bg-input-background`}>
+                    <h2 className="text-xl font-semibold mb-4 text-primary">방 검색</h2>
                     <form onSubmit={handleSearch} className="flex mb-4">
                         <input
                             type="text"
                             placeholder="방 이름 또는 카테고리 검색"
-                            className="border p-2 rounded-l w-full"
+                            className="border border-secondary p-2 rounded-l w-full text-primary bg-background"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
                         <button
                             type="submit"
-                            className="px-4 py-2 bg-green-500 text-white rounded-r"
+                            className="px-4 py-2 bg-secondary text-white rounded-r hover:bg-secondary-dark shadow-neon"
                         >
                             검색
                         </button>
                     </form>
-                    {searchQuery && allRooms.length === 0 && <p>검색 결과가 없습니다.</p>}
+                    {searchQuery && allRooms.length === 0 && <p className="text-primary">검색 결과가 없습니다.</p>}
                 </div>
 
                 {/* 사용자가 생성한 방 목록 */}
-                <div className={`max-w-md mx-auto bg-white p-6 rounded shadow mb-6 ${styles.roomList}`}>
-                    <h2 className="text-xl font-semibold mb-4">내가 생성한 방들</h2>
+                <div className={`${styles.roomList} bg-input-background`}>
+                    <h2 className="text-xl font-semibold mb-4 text-primary">내가 생성한 방들</h2>
                     {userRooms.length === 0 ? (
-                        <p>생성한 방이 없습니다.</p>
+                        <p className="text-primary">생성한 방이 없습니다.</p>
                     ) : (
                         <ul>
                             {userRooms.map((room) => (
                                 <li key={room.id} className={`flex justify-between items-center mb-2 ${styles.roomItem}`}>
-                                    <span>{room.name} ({room.id})</span>
+                                    <span className="text-primary">{room.name} ({room.id})</span>
                                     <button
                                         className={`px-2 py-1 ${styles.deleteButton}`}
                                         onClick={() => handleDeleteRoom(room.id)}
@@ -362,16 +362,16 @@ export default function Dashboard() {
                 </div>
 
                 {/* 모든 방 목록 */}
-                <div className={`max-w-md mx-auto bg-white p-6 rounded shadow ${styles.roomList}`}>
-                    <h2 className="text-xl font-semibold mb-4">모든 방들</h2>
+                <div className={`${styles.roomList} bg-input-background`}>
+                    <h2 className="text-xl font-semibold mb-4 text-primary">모든 방들</h2>
                     {allRooms.length === 0 ? (
-                        <p>현재 활성화된 방이 없습니다.</p>
+                        <p className="text-primary">현재 활성화된 방이 없습니다.</p>
                     ) : (
                         <ul>
                             {allRooms.map((room) => (
                                 <li key={room.id} className={`flex justify-between items-center mb-2 ${styles.roomItem}`}>
                                     <div>
-                                        <span className="font-semibold">{room.name}</span> ({room.id}) - {room.category}
+                                        <span className="font-semibold text-primary">{room.name}</span> ({room.id}) - {room.category}
                                         {room.isPrivate && " 🔒"}
                                         {room.creatorNickname && ` - 생성자: ${room.creatorNickname}`}
                                     </div>
@@ -390,4 +390,3 @@ export default function Dashboard() {
         </div>
     );
 }
-

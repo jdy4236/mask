@@ -5,45 +5,32 @@
     justify-content: center;
     align-items: center;
     height: 100%;
+    overflow: hidden;
+    /* 외부 스크롤 방지 */
 }
 
 .chatContainer {
-    height: 500px;
-    /* 크기 수정 */
-    width: 400px;
-    /* 고정된 가로 크기 */
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    height: 100%;
+    width: 600px;
+    /* 현재보다 반으로 줄인 600px (필요에 따라 조정) */
+    position: relative;
+    background: var(--input-background);
+    border-radius: 10px;
+    box-shadow: var(--tw-shadow-neon);
+    /* Tailwind의 neon 그림자 사용 */
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
-    /* 외부 스크롤 비활성화 */
-    background: var(--background-gradient);
-    /* Houston 스타일 배경 */
-    box-shadow: var(--box-shadow);
-    /* 네온 효과 */
-    border: 2px solid var(--accent);
-    /* 보라색 테두리 */
-    border-radius: 12px;
+    /* 외부 스크롤 방지 */
 }
 
 .chatBox {
-    height: calc(100% - 60px);
-    /* 헤더와 푸터를 제외한 높이 */
+    flex: 1;
     overflow-y: auto;
     /* 내부 스크롤 활성화 */
-    scrollbar-width: thin;
-    /* 얇은 스크롤바 */
-    scrollbar-color: var(--secondary) transparent;
-}
-
-.chatBox::-webkit-scrollbar {
-    width: 8px;
-}
-
-.chatBox::-webkit-scrollbar-thumb {
-    background: var(--secondary);
-    border-radius: 4px;
+    padding: 16px;
+    background: var(--background);
+    color: var(--foreground);
 }
 
 .message {
@@ -53,48 +40,78 @@
 
 .ownMessage {
     text-align: right;
-    background-color: rgba(255, 255, 255, 0.1);
-    /* 반투명 배경 */
-    padding: 8px;
-    border-radius: 8px;
 }
 
 .nickname {
     font-weight: bold;
-    color: var(--accent);
+    color: var(--primary);
+    text-shadow: 0 0 5px var(--primary);
 }
 
 .timestamp {
     font-size: 0.8em;
-    color: gray;
+    color: var(--secondary);
+    text-shadow: 0 0 3px var(--secondary);
+}
+
+.userList {
+    width: 150px;
+    background-color: var(--input-background);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--secondary) var(--input-background);
+}
+
+.userList::-webkit-scrollbar {
+    width: 8px;
+}
+
+.userList::-webkit-scrollbar-track {
+    background: var(--input-background);
+}
+
+.userList::-webkit-scrollbar-thumb {
+    background-color: var(--secondary);
+    border-radius: 4px;
+    border: 2px solid var(--input-background);
+}
+
+.userListTitle {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: var(--primary);
+}
+
+.userItem {
+    margin-bottom: 5px;
+    color: var(--foreground);
 }
 
 .inputContainer {
     display: flex;
-    background: var(--input-background);
-    padding: 10px;
-    border-radius: 10px;
+    width: 100%;
 }
 
 .input {
     flex: 1;
     padding: 8px;
     border: none;
-    background: var(--input-background);
-    color: var(--foreground);
     border-radius: 4px;
+    background: var(--background);
+    color: var(--foreground);
 }
 
 .button {
     margin-left: 8px;
     padding: 8px 16px;
-    background: var(--accent);
+    background-color: var(--primary);
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.2s ease;
 }
 
 .button:hover {
-    background: var(--secondary);
+    background-color: var(--secondary);
 }

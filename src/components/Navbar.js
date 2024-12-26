@@ -4,6 +4,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import styles from './Navbar.module.css';
 
 export default function Navbar() {
     const router = useRouter();
@@ -26,13 +27,13 @@ export default function Navbar() {
     };
 
     return (
-        <nav className="bg-blue-600 p-4 flex justify-between items-center">
-            <div className="text-white text-xl font-bold">Chat App</div>
-            <div className="flex items-center space-x-4">
-                <span className="text-white">안녕하세요, {nickname}님!</span>
+        <nav className={styles.navbar}>
+            <div className={styles.logo}>MOOINN</div>
+            <div className={styles.navItems}>
+                <span className={styles.greeting}>안녕하세요, {nickname}님!</span>
                 <button
                     onClick={handleLogout}
-                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                    className={styles.logoutButton}
                 >
                     로그아웃
                 </button>

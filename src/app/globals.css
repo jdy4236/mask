@@ -1,21 +1,39 @@
+/* src/app/globals.css */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #1e1e2e;
+  /* 다크 배경 */
+  --foreground: #c0caf5;
+  /* 연한 텍스트 */
+  --primary: #7aa2f7;
+  /* 차가운 파란색 */
+  --secondary: #9ece6a;
+  /* 민트색 */
+  --accent: #bb9af7;
+  /* 부드러운 보라색 */
+  --input-background: #313244;
+  /* 입력 필드 배경 */
+  --button-background: #7aa2f7;
+  /* 버튼 배경 */
+  --button-hover: #6c8bd5;
+  /* 버튼 호버 */
+  --error-color: #f7768e;
+  /* 에러 메시지 색상 */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #1e1e2e;
+    --foreground: #c0caf5;
   }
 }
 
 body {
   color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--background-gradient);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }

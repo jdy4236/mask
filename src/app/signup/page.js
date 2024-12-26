@@ -36,33 +36,33 @@ export default function RegisterPage() {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-            <h1 className="text-3xl font-bold mb-6">Register</h1>
-            {error && <p className="text-red-500 mb-4">{error}</p>}
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-main">
+            <h1 className="text-3xl font-bold mb-6 text-primary">Register</h1>
+            {error && <p className="text-error-color mb-4">{error}</p>}
             <input
                 type="text"
                 placeholder="닉네임"
                 value={nickname}
                 onChange={(e) => setNickname(e.target.value)}
-                className="border p-2 rounded mb-4 w-full max-w-sm"
+                className="border bg-input-background p-2 rounded mb-4 w-full max-w-sm text-primary"
             />
             <input
                 type="email"
                 placeholder="이메일"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="border p-2 rounded mb-4 w-full max-w-sm"
+                className="border bg-input-background p-2 rounded mb-4 w-full max-w-sm text-primary"
             />
             <input
                 type="password"
                 placeholder="비밀번호"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="border p-2 rounded mb-4 w-full max-w-sm"
+                className="border bg-input-background p-2 rounded mb-4 w-full max-w-sm text-primary"
             />
             <button
                 onClick={handleRegister}
-                className="px-4 py-2 bg-green-500 text-white rounded w-full max-w-sm"
+                className="px-4 py-2 bg-button-background text-white rounded w-full max-w-sm hover:bg-button-hover shadow-neon"
             >
                 회원가입
             </button>

@@ -1,49 +1,28 @@
-/* src/app/styles/dashboard.module.css */
+/* src/app/dashboard/dashboard.module.css */
 
 /* 대시보드 전체 컨테이너 */
-.container {
+.dashboardContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 24px;
-    background-color: #f0f4f8;
-    /* Light gray background */
+    background: transparent;
+    /* 부모의 배경을 사용 */
     min-height: 100vh;
 }
 
 /* 방 생성 섹션 */
-.roomCreation {
-    width: 100%;
-    max-width: 600px;
-    background-color: #ffffff;
-    /* White background */
-    padding: 24px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 24px;
-}
-
-/* 방 검색 섹션 */
-.roomSearch {
-    width: 100%;
-    max-width: 600px;
-    background-color: #ffffff;
-    /* White background */
-    padding: 24px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 24px;
-}
-
-/* 방 목록 섹션 */
+.roomCreation,
+.roomSearch,
 .roomList {
     width: 100%;
     max-width: 600px;
-    background-color: #ffffff;
-    /* White background */
+    background-color: var(--input-background);
     padding: 24px;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--tw-shadow-neon);
+    /* Tailwind의 neon 그림자 사용 */
+    margin-bottom: 24px;
 }
 
 /* 각 방 항목 */
@@ -52,8 +31,8 @@
     justify-content: space-between;
     align-items: center;
     padding: 12px 0;
-    border-bottom: 1px solid #e5e7eb;
-    /* Light border */
+    border-bottom: 1px solid var(--secondary);
+    color: var(--foreground);
 }
 
 .roomItem:last-child {
@@ -62,47 +41,80 @@
 
 /* 방 삭제 버튼 */
 .deleteButton {
-    background-color: #ef4444;
-    /* Red background */
+    background-color: #f7768e;
+    /* 에러 색상 */
     color: #ffffff;
-    /* White text */
     border: none;
     padding: 6px 12px;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.2s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.deleteButton::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent));
+    z-index: -1;
+    filter: blur(4px);
+    opacity: 0.7;
+    border-radius: 6px;
 }
 
 .deleteButton:hover {
-    background-color: #dc2626;
-    /* Darker red on hover */
+    background-color: #e06973;
+    /* 어두운 에러 색상 */
 }
 
 /* 방 참여 버튼 */
 .joinButton {
-    background-color: #3b82f6;
-    /* Blue background */
+    background-color: var(--secondary);
+    /* 민트색 배경 */
     color: #ffffff;
-    /* White text */
     border: none;
     padding: 6px 12px;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.2s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.joinButton::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent));
+    z-index: -1;
+    filter: blur(4px);
+    opacity: 0.7;
+    border-radius: 6px;
 }
 
 .joinButton:hover {
-    background-color: #2563eb;
-    /* Darker blue on hover */
+    background-color: #8bc34a;
+    /* 어두운 민트색 호버 */
 }
 
 /* 에러 메시지 */
 .error {
-    color: #ef4444;
-    /* Red text */
+    color: var(--error-color);
     text-align: center;
     margin-bottom: 16px;
     font-weight: bold;
 }
 
-/* 추가적인 클래스은 필요에 따라 여기에 작성하세요 */
+/* 네온 그림자 효과 */
+.shadow-neon {
+    box-shadow: 0 4px 20px rgba(122, 162, 247, 0.5);
+    /* 네온 효과 */
+}
