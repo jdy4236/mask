@@ -1,0 +1,37 @@
+// prisma/schema.prisma
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  nickname  String   @unique
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  messages  Message[] // User가 보낸 메시지
+}
+
+model Room {
+  id        String    @id
+  type      String
+  createdBy Int
+  createdAt DateTime  @default(now())
+  messages  Message[] // Room에 포함된 메시지
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  roomId    String
+  senderId  Int
+  content   String
+  createdAt DateTime @default(now())
+  Room      Room     @relation(fields: [roomId], references: [id])
+  User      User     @relation(fields: [senderId], references: [id])
+}
