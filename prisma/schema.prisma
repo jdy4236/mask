@@ -9,29 +9,36 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// prisma/schema.prisma
+
 model User {
-  id        Int      @id @default(autoincrement())
-  nickname  String   @unique
-  email     String   @unique
+  id        Int       @id @default(autoincrement())
+  nickname  String    @unique
+  email     String    @unique
   password  String
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
   messages  Message[] // User가 보낸 메시지
 }
 
 model Room {
-  id        String    @id
-  type      String
-  createdBy Int
-  createdAt DateTime  @default(now())
-  messages  Message[] // Room에 포함된 메시지
+  id          String    @id
+  name        String
+  category    String
+  isPrivate   Boolean   @default(false)
+  password    String?   // 비밀방일 경우 비밀번호
+  participantLimit Int?  // 참여자 수 제한
+  lifespan    Int?      // 수명 기간 (분 단위)
+  createdBy   Int
+  createdAt   DateTime  @default(now())
+  messages    Message[] // Room에 포함된 메시지
 }
 
 model Message {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   roomId    String
   senderId  Int
   content   String
-  createdAt DateTime @default(now())
-  Room      Room     @relation(fields: [roomId], references: [id])
-  User      User     @relation(fields: [senderId], references: [id])
+  createdAt DateTime  @default(now())
+  Room      Room      @relation(fields: [roomId], references: [id])
+  User      User      @relation(fields: [senderId], references: [id])
 }
