@@ -18,21 +18,21 @@ export default function Home() {
   }, [router]);
 
   if (isAuthenticated) {
-    return <p className="text-primary">Loading...</p>;
+    return <p>Loading...</p>;
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-main">
-      <h1 className="text-3xl font-bold mb-6 text-primary">MOOINN</h1>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-custom-bg">
+      <h1 className="text-3xl font-bold mb-6 text-white">INN</h1>
       <div className="flex space-x-4">
         <button
-          className="px-4 py-2 bg-button-background text-white rounded hover:bg-button-hover shadow-neon"
+          className="px-4 py-2 bg-button-bg border border-button-border text-white rounded"
           onClick={() => router.push("/login")}
         >
           Login
         </button>
         <button
-          className="px-4 py-2 bg-secondary text-white rounded hover:bg-secondary-dark shadow-neon"
+          className="px-4 py-2 bg-button-bg border border-button-border text-white rounded"
           onClick={() => router.push("/signup")}
         >
           Signup

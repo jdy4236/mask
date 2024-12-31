@@ -5,37 +5,43 @@
     justify-content: center;
     align-items: center;
     height: 100%;
-    overflow: hidden;
-    /* 외부 스크롤 방지 */
 }
 
 .chatContainer {
-    height: 100%;
-    width: 600px;
-    /* 현재보다 반으로 줄인 600px (필요에 따라 조정) */
-    position: relative;
-    background: var(--input-background);
-    border-radius: 10px;
-    box-shadow: var(--tw-shadow-neon);
-    /* Tailwind의 neon 그림자 사용 */
     display: flex;
     flex-direction: column;
+    height: 100%;
+    /* 부모의 높이를 채우도록 설정 */
+    width: 100%;
+    max-width: 800px;
+    /* 필요에 따라 너비를 조절하세요 */
+    background-color: #010409;
+    border: 1px solid #3d444d;
+    border-radius: 8px;
     overflow: hidden;
-    /* 외부 스크롤 방지 */
 }
 
 .chatBox {
     flex: 1;
     overflow-y: auto;
-    /* 내부 스크롤 활성화 */
+    /* 스크롤바 표시 */
     padding: 16px;
-    background: var(--background);
-    color: var(--foreground);
+    background-color: #010409;
+    color: #3d444d;
+}
+
+/* 스크롤바 스타일 */
+.chatBox::-webkit-scrollbar {
+    width: 8px;
+}
+
+.chatBox::-webkit-scrollbar-thumb {
+    background-color: #3d444d;
+    border-radius: 4px;
 }
 
 .message {
     margin-bottom: 10px;
-    color: var(--foreground);
 }
 
 .ownMessage {
@@ -44,74 +50,58 @@
 
 .nickname {
     font-weight: bold;
-    color: var(--primary);
-    text-shadow: 0 0 5px var(--primary);
 }
 
 .timestamp {
     font-size: 0.8em;
-    color: var(--secondary);
-    text-shadow: 0 0 3px var(--secondary);
+    color: #f7768e;
+    /* 에러 색상과 구분을 위해 유지 */
 }
 
 .userList {
-    width: 150px;
-    background-color: var(--input-background);
+    width: 200px;
+    /* 필요에 따라 너비를 조절하세요 */
+    background-color: #010409;
+    border-left: 1px solid #3d444d;
     overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: var(--secondary) var(--input-background);
-}
-
-.userList::-webkit-scrollbar {
-    width: 8px;
-}
-
-.userList::-webkit-scrollbar-track {
-    background: var(--input-background);
-}
-
-.userList::-webkit-scrollbar-thumb {
-    background-color: var(--secondary);
-    border-radius: 4px;
-    border: 2px solid var(--input-background);
 }
 
 .userListTitle {
     font-weight: bold;
     margin-bottom: 10px;
-    color: var(--primary);
+    color: #ffffff;
 }
 
 .userItem {
     margin-bottom: 5px;
-    color: var(--foreground);
+    color: #ffffff;
 }
 
 .inputContainer {
     display: flex;
-    width: 100%;
 }
 
 .input {
     flex: 1;
     padding: 8px;
-    border: none;
+    border: 1px solid #3d444d;
     border-radius: 4px;
-    background: var(--background);
-    color: var(--foreground);
+    background-color: #3d444d;
+    /* 입력 배경색 */
+    color: #ffffff;
+    /* 텍스트 색상 */
 }
 
 .button {
     margin-left: 8px;
     padding: 8px 16px;
-    background-color: var(--primary);
-    color: white;
-    border: none;
+    background-color: #212830;
+    color: #ffffff;
+    border: 1px solid #3d444d;
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.2s ease;
 }
 
 .button:hover {
-    background-color: var(--secondary);
+    background-color: #3d444d;
 }

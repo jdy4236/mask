@@ -5,35 +5,13 @@
 @tailwind utilities;
 
 :root {
-  --background: #1e1e2e;
-  /* 다크 배경 */
-  --foreground: #c0caf5;
-  /* 연한 텍스트 */
-  --primary: #7aa2f7;
-  /* 차가운 파란색 */
-  --secondary: #9ece6a;
-  /* 민트색 */
-  --accent: #bb9af7;
-  /* 부드러운 보라색 */
-  --input-background: #313244;
-  /* 입력 필드 배경 */
-  --button-background: #7aa2f7;
-  /* 버튼 배경 */
-  --button-hover: #6c8bd5;
-  /* 버튼 호버 */
-  --error-color: #f7768e;
-  /* 에러 메시지 색상 */
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #1e1e2e;
-    --foreground: #c0caf5;
-  }
+  /* 필요한 다른 CSS 변수들 */
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background-gradient);
+  color: #3d444d;
+  /* custom-text */
+  background: #010409;
+  /* custom-bg */
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }

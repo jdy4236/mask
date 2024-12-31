@@ -1,44 +1,46 @@
 /* src/components/Navbar.module.css */
 
 .navbar {
-    @apply flex justify-between items-center p-4 bg-gradient-main;
-    box-shadow: var(--tw-shadow-neon);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background-color: #010409;
+    /* 주 배경색 */
+    border-bottom: 1px solid #3d444d;
+    /* 주 테두리 색상 */
 }
 
 .logo {
-    @apply text-primary text-xl font-bold;
-    text-shadow: 0 0 5px var(--primary);
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: bold;
 }
 
 .navItems {
-    @apply flex items-center space-x-4;
+    display: flex;
+    align-items: center;
+    gap: 16px;
 }
 
 .greeting {
-    @apply text-primary;
+    color: #ffffff;
 }
 
 .logoutButton {
-    @apply bg-button-background text-white font-bold py-2 px-4 rounded relative z-10;
-    box-shadow: 0 0 10px var(--primary);
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.logoutButton::before {
-    content: '';
-    position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent));
-    z-index: -1;
-    filter: blur(4px);
-    opacity: 0.7;
-    border-radius: 6px;
+    background-color: #212830;
+    /* 버튼 배경색 */
+    color: #ffffff;
+    /* 흰색 텍스트 */
+    border: 1px solid #3d444d;
+    /* 버튼 테두리 색상 */
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .logoutButton:hover {
-    background-color: var(--button-hover);
-    box-shadow: 0 0 15px var(--secondary);
+    background-color: #3d444d;
+    /* 호버 시 버튼 배경색 변경 */
 }
