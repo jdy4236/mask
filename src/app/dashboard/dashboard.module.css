@@ -13,25 +13,114 @@
 
 /* 방 생성 섹션 */
 .roomCreation {
-    /* 별도의 스타일이 필요하지 않을 수 있습니다. Tailwind 클래스로 대체 */
+    /* 이미 Tailwind CSS로 스타일링됨 */
+    height: 600px;
+    /* 기존 570px에서 600px으로 변경 */
 }
 
-/* 방 검색 섹션 */
-.roomSearch {
-    /* 별도의 스타일이 필요하지 않을 수 있습니다. Tailwind 클래스로 대체 */
+/* 내가 생성한 방들 섹션 */
+.userRooms {
+    /* 이미 Tailwind CSS로 스타일링됨 */
+    height: 600px;
+    /* 기존 700px에서 600px으로 변경 */
+    overflow-y: auto;
+    /* 스크롤 활성화 */
+
+    /* 스크롤바 스타일링 - Webkit 기반 브라우저 (Chrome, Safari, Edge) */
+    scrollbar-width: thin;
+    /* Firefox */
+    scrollbar-color: #555 #2c2f33;
+    /* Firefox: thumb color, track color */
+
+    /* Webkit 브라우저용 */
+    &::-webkit-scrollbar {
+        width: 8px;
+        /* 스크롤바 너비 */
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #2c2f33;
+        /* 트랙 배경색 */
+        border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #555;
+        /* 스크롤바 색상 */
+        border-radius: 4px;
+        border: 2px solid #2c2f33;
+        /* 스크롤바 주변 여백 */
+    }
 }
 
-/* 방 목록 섹션 */
-.roomList {
-    /* 별도의 스타일이 필요하지 않을 수 있습니다. Tailwind 클래스로 대체 */
+/* 오른쪽 섹션 */
+.rightSection {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 600px;
+    /* 기존 700px에서 600px으로 변경 */
+}
+
+/* 오른쪽 위 섹션: 방 검색 */
+.rightTopSection {
+    /* 필요에 따라 추가적인 스타일을 여기에 작성하세요 */
+    flex: 0 0 25%;
+    /* 높이를 비율로 설정하여 600px에 맞춤 */
+}
+
+/* 오른쪽 아래 섹션: 모든 방들 */
+.rightBottomSection {
+    /* 필요에 따라 추가적인 스타일을 여기에 작성하세요 */
+    flex: 1;
+    max-height: 500px;
+    /* 필요에 따라 조정 */
+    overflow-y: auto;
+    /* 스크롤 활성화 */
+
+    /* 스크롤바 스타일링 - Webkit 기반 브라우저 (Chrome, Safari, Edge) */
+    scrollbar-width: thin;
+    /* Firefox */
+    scrollbar-color: #555 #2c2f33;
+    /* Firefox: thumb color, track color */
+
+    /* Webkit 브라우저용 */
+    &::-webkit-scrollbar {
+        width: 8px;
+        /* 스크롤바 너비 */
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #2c2f33;
+        /* 트랙 배경색 */
+        border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #555;
+        /* 스크롤바 색상 */
+        border-radius: 4px;
+        border: 2px solid #2c2f33;
+        /* 스크롤바 주변 여백 */
+    }
 }
 
 /* 각 방 항목 */
-.roomItem {
+.roomItem_middle {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 0;
+    padding: 8px 0;
+    border-bottom: 1px solid #3d444d;
+    height: 50px;
+    /* 주 테두리 색상 */
+}
+
+.roomItem_right {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
     border-bottom: 1px solid #3d444d;
     /* 주 테두리 색상 */
 }
@@ -85,6 +174,22 @@
     text-align: center;
     margin-bottom: 16px;
     font-weight: bold;
+}
+
+/* 방 검색 버튼 */
+.roomSearch button {
+    padding: 6px 12px;
+    /* 버튼 크기를 삭제 및 입장 버튼과 동일하게 */
+    height: 40px;
+    /* 동일한 높이로 조정 */
+}
+
+/* 방 이름이 길어질 때 텍스트 처리 */
+.text-custom-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
 }
 
 /* 추가적인 클래스은 필요에 따라 여기에 작성하세요 */

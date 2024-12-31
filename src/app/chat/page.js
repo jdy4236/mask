@@ -1,10 +1,11 @@
+// src/app/chat/page.js
+
 "use client";
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { io } from "socket.io-client";
 import styles from './chat.module.css'; // CSS 모듈 임포트
-import Navbar from "@/components/Navbar"; // 상단 메뉴 컴포넌트 임포트
 
 let socket;
 
@@ -17,22 +18,36 @@ export default function ChatPage() {
     const [password, setPassword] = useState("");
     const [isPrivate, setIsPrivate] = useState(false);
     const [showPasswordPrompt, setShowPasswordPrompt] = useState(false);
+    const [showUserDropdown, setShowUserDropdown] = useState(false);
     const messagesEndRef = useRef(null);
     const router = useRouter();
     const [error, setError] = useState("");
 
     useEffect(() => {
         const searchParams = new URLSearchParams(window.location.search);
-        const room = searchParams.get("roomId");
-        const isPrivateRoom = searchParams.get("isPrivate") === "true";
+        let room = searchParams.get("roomId");
+        let isPrivateRoom = searchParams.get("isPrivate") === "true";
 
         if (!room) {
-            router.push("/dashboard"); // 잘못된 접근 시 대시보드로 리디렉션
+            // sessionStorage에서 방 정보 복원 시도
+            room = sessionStorage.getItem('currentRoomId');
+            isPrivateRoom = sessionStorage.getItem('currentIsPrivate') === 'true';
+        } else {
+            // 새로운 방 정보가 있을 경우 sessionStorage에 저장
+            sessionStorage.setItem('currentRoomId', room);
+            sessionStorage.setItem('currentIsPrivate', isPrivateRoom);
+        }
+
+        if (!room) {
+            router.push("/dashboard"); // 방 정보가 없을 경우 대시보드로 리디렉션
             return;
         }
 
         setRoomId(room);
         setIsPrivate(isPrivateRoom);
+
+        // URL에서 쿼리 파라미터 제거
+        router.replace("/chat");
 
         // JWT 토큰과 닉네임 가져오기
         const token = localStorage.getItem("token");
@@ -92,17 +107,20 @@ export default function ChatPage() {
         socket.on("passwordVerification", ({ success, message }) => {
             if (success) {
                 setShowPasswordPrompt(false);
-                socket.emit("joinRoom", { roomId: room, password: password });
+                // 이미 방에 참가했으므로 추가적으로 joinRoom을 호출할 필요 없음
             } else {
                 alert(message);
-                window.close(); // 창을 닫습니다.
+                // 비밀번호 재입력 요청
+                setPassword("");
             }
         });
 
         // 방 참가 중 에러 처리
         socket.on("error", ({ message }) => {
             alert(message);
-            window.close(); // 창을 닫습니다.
+            // 비밀번호 재입력 요청
+            setShowPasswordPrompt(true);
+            setPassword("");
         });
 
         // 소켓 연결 에러 처리
@@ -119,6 +137,9 @@ export default function ChatPage() {
 
         return () => {
             socket.disconnect();
+            // 창을 닫을 때 sessionStorage에서 방 정보 삭제
+            sessionStorage.removeItem('currentRoomId');
+            sessionStorage.removeItem('currentIsPrivate');
         };
     }, [router]);
 
@@ -145,24 +166,70 @@ export default function ChatPage() {
 
     return (
         <div className="flex flex-col min-h-screen bg-custom-bg text-custom-text">
-            <Navbar /> {/* 상단 메뉴 컴포넌트 추가 */}
+            {/* 글로벌 스크롤바 스타일 추가 */}
+            <style jsx global>{`
+                /* Webkit 기반 브라우저 (Chrome, Safari, Edge)용 스크롤바 스타일 */
+                ::-webkit-scrollbar {
+                    width: 8px;
+                }
+
+                ::-webkit-scrollbar-track {
+                    background: #2c2f33;
+                }
+
+                ::-webkit-scrollbar-thumb {
+                    background-color: #555;
+                    border-radius: 4px;
+                    border: 2px solid #2c2f33;
+                }
+
+                /* Firefox용 스크롤바 스타일 */
+                * {
+                    scrollbar-width: thin;
+                    scrollbar-color: #555 #2c2f33;
+                }
+            `}</style>
+
             <div className={`flex-grow p-6 bg-custom-bg ${styles.container}`}>
-                {error && <p className="text-error-color mb-4 text-center">{error}</p>}
+                {error && <p className={`text-error-color mb-4 text-center ${styles.error}`}>{error}</p>}
 
                 <div className={`flex flex-col bg-custom-bg border border-button-border rounded shadow-lg w-full max-w-md ${styles.chatContainer}`}>
-                    <header className="bg-custom-bg text-white py-4 px-6 flex justify-between rounded-t border-b border-button-border">
+                    <header className="bg-custom-bg text-white py-4 px-6 flex justify-between items-center rounded-t border-b border-button-border">
                         <div>
                             <h1 className="text-lg font-bold">채팅 방: {roomId}</h1>
                         </div>
-                        <button
-                            onClick={generateInvite}
-                            className="px-4 py-2 bg-button-bg border border-button-border text-white rounded"
-                        >
-                            초대 링크 생성
-                        </button>
+                        <div className="flex items-center space-x-2">
+                            <div className="relative">
+                                <button
+                                    onClick={() => setShowUserDropdown(!showUserDropdown)}
+                                    className="px-4 py-2 bg-button-bg border border-button-border text-white rounded"
+                                >
+                                    사용자 목록
+                                </button>
+                                {showUserDropdown && (
+                                    <div className="absolute right-0 mt-2 w-48 bg-custom-bg border border-button-border rounded shadow-lg z-10">
+                                        <ul className="py-2">
+                                            {users.map((user, index) => (
+                                                <li key={index} className="px-4 py-2 hover:bg-button-bg text-white">
+                                                    {user.nickname ? user.nickname : user}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* <button
+                                onClick={generateInvite}
+                                className="px-4 py-2 bg-button-bg border border-button-border text-white rounded"
+                            >
+                                초대 링크 생성
+                            </button> */}
+
+                        </div>
                     </header>
                     <div className="flex flex-grow">
-                        <main className={`flex-1 overflow-y-auto p-4 ${styles.chatBox}`}>
+                        <main className={`flex-1 p-4 ${styles.chatBox}`}>
                             <ul>
                                 {messages.map((msg, index) => (
                                     <li
@@ -176,19 +243,9 @@ export default function ChatPage() {
                             </ul>
                             <div ref={messagesEndRef} />
                         </main>
-                        <aside className={styles.userList}>
-                            <h2 className={styles.userListTitle}>사용자 목록</h2>
-                            <ul>
-                                {users.map((user, index) => (
-                                    <li key={index} className={styles.userItem}>
-                                        {user.nickname ? user.nickname : user}
-                                    </li>
-                                ))}
-                            </ul>
-                        </aside>
                     </div>
                     <footer className="bg-custom-bg p-4 flex">
-                        <div className={styles.inputContainer}>
+                        <div className={`${styles.inputContainer} flex-1`}>
                             <input
                                 type="text"
                                 className={`bg-input-bg border border-input-border text-white ${styles.input}`}

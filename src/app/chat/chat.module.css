@@ -28,16 +28,33 @@
     padding: 16px;
     background-color: #010409;
     color: #3d444d;
+
+    /* 스크롤바 스타일링 - Firefox */
+    scrollbar-width: thin;
+    /* 스크롤바 너비를 얇게 설정 */
+    scrollbar-color: #555 #2c2f33;
+    /* 스크롤바 색상, 트랙 색상 */
+
+    /* 스크롤바 스타일링 - Webkit 기반 브라우저 (Chrome, Safari, Edge) */
 }
 
-/* 스크롤바 스타일 */
 .chatBox::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
+    /* 스크롤바 너비를 더 얇게 설정 */
+}
+
+.chatBox::-webkit-scrollbar-track {
+    background: #2c2f33;
+    /* 트랙 배경색 */
+    border-radius: 3px;
 }
 
 .chatBox::-webkit-scrollbar-thumb {
-    background-color: #3d444d;
-    border-radius: 4px;
+    background-color: #555;
+    /* 스크롤바 색상 */
+    border-radius: 3px;
+    border: 1px solid #2c2f33;
+    /* 스크롤바 주변 여백 */
 }
 
 .message {
@@ -58,27 +75,9 @@
     /* 에러 색상과 구분을 위해 유지 */
 }
 
-.userList {
-    width: 200px;
-    /* 필요에 따라 너비를 조절하세요 */
-    background-color: #010409;
-    border-left: 1px solid #3d444d;
-    overflow-y: auto;
-}
-
-.userListTitle {
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #ffffff;
-}
-
-.userItem {
-    margin-bottom: 5px;
-    color: #ffffff;
-}
-
 .inputContainer {
     display: flex;
+    flex: 1;
 }
 
 .input {
@@ -105,3 +104,14 @@
 .button:hover {
     background-color: #3d444d;
 }
+
+/* 에러 메시지 스타일 */
+.error {
+    color: #f7768e;
+    /* 에러 메시지 색상 */
+    text-align: center;
+    margin-bottom: 16px;
+    font-weight: bold;
+}
+
+/* 추가적인 클래스은 필요에 따라 여기에 작성하세요 */

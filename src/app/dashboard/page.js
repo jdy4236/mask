@@ -18,6 +18,7 @@ export default function Dashboard() {
     const [password, setPassword] = useState("");
     const [participantLimit, setParticipantLimit] = useState("");
     const [lifespan, setLifespan] = useState("");
+    const [lifespanChecked, setLifespanChecked] = useState(false);
     const [error, setError] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
     const router = useRouter();
@@ -113,7 +114,7 @@ export default function Dashboard() {
             isPrivate,
             password: isPrivate ? password : null,
             participantLimit: participantLimit ? parseInt(participantLimit) : null,
-            lifespan: lifespan ? parseInt(lifespan) : null,
+            lifespan: lifespanChecked ? parseInt(lifespan) : null,
         };
 
         try {
@@ -137,6 +138,7 @@ export default function Dashboard() {
                 setPassword("");
                 setParticipantLimit("");
                 setLifespan("");
+                setLifespanChecked(false);
                 fetchRooms();
                 // 생성된 방으로 새 창 열기
                 openChatWindow(data.room.id, isPrivate);
@@ -177,32 +179,8 @@ export default function Dashboard() {
     };
 
     const handleJoinRoom = (room) => {
-        if (room.isPrivate) {
-            const userPassword = prompt("비밀방 비밀번호를 입력하세요:");
-            if (!userPassword) {
-                alert("비밀번호 입력이 취소되었습니다.");
-                return;
-            }
-            // 소켓을 통해 비밀번호 검증 후 방 참가
-            socket.emit("verifyRoomPassword", { roomId: room.id, password: userPassword });
-
-            const handlePasswordVerification = ({ success, message }) => {
-                if (success) {
-                    openChatWindow(room.id, true);
-                } else {
-                    alert(message);
-                }
-            };
-
-            socket.on("passwordVerification", handlePasswordVerification);
-
-            // 클린업: 컴포넌트 언마운트 시 이벤트 리스너 제거
-            return () => {
-                socket.off("passwordVerification", handlePasswordVerification);
-            };
-        } else {
-            openChatWindow(room.id, false);
-        }
+        // 비밀방 여부와 관계없이 방에 입장
+        openChatWindow(room.id, room.isPrivate);
     };
 
     const handleSearch = (e) => {
@@ -220,7 +198,7 @@ export default function Dashboard() {
 
     const openChatWindow = (roomId, isPrivate) => {
         const url = `${window.location.origin}/chat?roomId=${encodeURIComponent(roomId)}&isPrivate=${isPrivate}`;
-        const windowFeatures = "width=800,height=600,left=200,top=100,resizable=yes,scrollbars=yes,status=yes";
+        const windowFeatures = "width=500,height=600,left=200,top=100,resizable=yes,scrollbars=yes,status=yes";
         window.open(url, `ChatRoom_${roomId}`, windowFeatures);
     };
 
@@ -236,26 +214,26 @@ export default function Dashboard() {
                 <h1 className="text-3xl font-bold mb-6 text-white text-center">Dashboard</h1>
                 {error && <p className="text-error-color mb-4 text-center">{error}</p>}
 
-                <div className="flex space-x-6">
+                <div className="flex justify-center space-x-6">
                     {/* 왼쪽: 새 방 생성 */}
-                    <div className={`w-1/3 bg-custom-bg p-6 rounded border border-button-border ${styles.roomCreation}`}>
+                    <div className={`w-1/4 bg-custom-bg p-6 rounded border border-button-border ${styles.roomCreation}`}>
                         <h2 className="text-xl font-semibold mb-4 text-custom-text">새 방 생성</h2>
                         <input
                             type="text"
                             placeholder="방 이름"
-                            className="border border-input-border p-2 rounded mb-4 w-full bg-input-bg text-white"
+                            className="border border-input-border p-2 rounded mb-4 w-full bg-input-bg text-white disabled:bg-gray-700 disabled:text-gray-400"
                             value={roomName}
                             onChange={(e) => setRoomName(e.target.value)}
                         />
                         <input
                             type="text"
                             placeholder="방 ID"
-                            className="border border-input-border p-2 rounded mb-4 w-full bg-input-bg text-white"
+                            className="border border-input-border p-2 rounded mb-4 w-full bg-input-bg text-white disabled:bg-gray-700 disabled:text-gray-400"
                             value={roomId}
                             onChange={(e) => setRoomId(e.target.value)}
                         />
                         <select
-                            className="border border-input-border p-2 rounded mb-4 w-full bg-input-bg text-white"
+                            className="border border-input-border p-2 rounded mb-4 w-full bg-input-bg text-white disabled:bg-gray-700 disabled:text-gray-400"
                             value={category}
                             onChange={(e) => setCategory(e.target.value)}
                         >
@@ -264,6 +242,38 @@ export default function Dashboard() {
                             <option value="Random">랜덤</option>
                             {/* 추가적인 카테고리를 원하시면 여기에 추가하세요 */}
                         </select>
+                        <input
+                            type="number"
+                            placeholder="참여자 수 제한 (선택 사항)"
+                            className="border border-input-border p-2 rounded mb-4 w-full bg-input-bg text-white disabled:bg-gray-700 disabled:text-gray-400"
+                            value={participantLimit}
+                            onChange={(e) => setParticipantLimit(e.target.value)}
+                        />
+
+                        {/* 방 수명 설정 체크박스 */}
+                        <div className="flex items-center mb-4">
+                            <input
+                                type="checkbox"
+                                id="lifespan"
+                                checked={lifespanChecked}
+                                onChange={(e) => setLifespanChecked(e.target.checked)}
+                                className="mr-2"
+                            />
+                            <label htmlFor="lifespan" className="text-custom-text">방 수명 설정 (분)</label>
+                        </div>
+                        {/* 방 수명 설정 입력 필드 */}
+                        <input
+                            type="number"
+                            placeholder="수명 기간 (10분 단위)"
+                            className="border border-input-border p-2 rounded mb-4 w-full bg-input-bg text-white disabled:bg-gray-900 disabled:text-gray-400"
+                            value={lifespan}
+                            onChange={(e) => setLifespan(e.target.value)}
+                            step="10"
+                            min="10"
+                            disabled={!lifespanChecked}
+                        />
+
+                        {/* 비밀방 체크박스 */}
                         <div className="flex items-center mb-4">
                             <input
                                 type="checkbox"
@@ -274,43 +284,16 @@ export default function Dashboard() {
                             />
                             <label htmlFor="isPrivate" className="text-custom-text">비밀방</label>
                         </div>
-                        {isPrivate && (
-                            <input
-                                type="password"
-                                placeholder="비밀방 비밀번호"
-                                className="border border-input-border p-2 rounded mb-4 w-full bg-input-bg text-white"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                        )}
+                        {/* 비밀방 비밀번호 입력 필드 */}
                         <input
-                            type="number"
-                            placeholder="참여자 수 제한 (선택 사항)"
-                            className="border border-input-border p-2 rounded mb-4 w-full bg-input-bg text-white"
-                            value={participantLimit}
-                            onChange={(e) => setParticipantLimit(e.target.value)}
+                            type="password"
+                            placeholder="비밀방 비밀번호"
+                            className="border border-input-border p-2 rounded mb-4 w-full bg-input-bg text-white disabled:bg-gray-900 disabled:text-gray-400"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            disabled={!isPrivate}
                         />
-                        <div className="flex items-center mb-4">
-                            <input
-                                type="checkbox"
-                                id="lifespan"
-                                checked={lifespan !== ""}
-                                onChange={(e) => setLifespan(e.target.checked ? "10" : "")}
-                                className="mr-2"
-                            />
-                            <label htmlFor="lifespan" className="text-custom-text">방 수명 설정 (분)</label>
-                        </div>
-                        {lifespan !== "" && (
-                            <input
-                                type="number"
-                                placeholder="수명 기간 (10분 단위)"
-                                className="border border-input-border p-2 rounded mb-4 w-full bg-input-bg text-white"
-                                value={lifespan}
-                                onChange={(e) => setLifespan(e.target.value)}
-                                step="10"
-                                min="10"
-                            />
-                        )}
+
                         <button
                             className="px-4 py-2 bg-button-bg border border-button-border text-white rounded w-full transition duration-200 ease-in-out hover:brightness-200"
                             onClick={handleCreateRoom}
@@ -319,61 +302,66 @@ export default function Dashboard() {
                         </button>
                     </div>
 
-                    {/* 오른쪽: 방 검색, 내가 생성한 방들, 모든 방들 */}
-                    <div className="w-2/3 space-y-6">
-                        {/* 방 검색 섹션 */}
-                        <div className={`bg-custom-bg p-6 rounded border border-button-border ${styles.roomSearch}`}>
+                    {/* 중간: 내가 생성한 방들 */}
+                    <div className={`w-1/4 bg-custom-bg p-6 rounded border border-button-border ${styles.userRooms}`}>
+                        <h2 className="text-xl font-semibold mb-4 text-custom-text">내가 생성한 방들</h2>
+                        {userRooms.length === 0 ? (
+                            <p className="text-custom-text">생성한 방이 없습니다.</p>
+                        ) : (
+                            <ul>
+                                {userRooms.map((room) => (
+                                    <li key={room.id} className={`flex justify-between items-center mb-2 ${styles.roomItem_middle}`}>
+                                        <span className="text-custom-text">{room.name} ({room.id})</span>
+                                        <button
+                                            className={`px-2 py-1 bg-button-bg border border-button-border text-white rounded transition duration-200 ease-in-out hover:brightness-200 ${styles.deleteButton}`}
+                                            onClick={() => handleDeleteRoom(room.id)}
+                                        >
+                                            삭제
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+
+                    {/* 오른쪽: 방 검색 및 모든 방들 */}
+                    <div className={`w-1/4 bg-custom-bg p-6 rounded border border-button-border ${styles.rightSection}`}>
+                        {/* 오른쪽 위 섹션: 방 검색 */}
+                        <div className={`mb-6 ${styles.rightTopSection}`}>
                             <h2 className="text-xl font-semibold mb-4 text-custom-text">방 검색</h2>
                             <form onSubmit={handleSearch} className="flex mb-4">
                                 <input
                                     type="text"
-                                    placeholder="방 이름 또는 카테고리 검색"
-                                    className="border border-input-border p-2 rounded-l w-full bg-input-bg text-white"
+                                    placeholder="검색"
+                                    className="border border-input-border p-2 rounded-l w-2/3 bg-input-bg text-white disabled:bg-gray-700 disabled:text-gray-400"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                 />
                                 <button
                                     type="submit"
-                                    className="px-4 py-2 bg-button-bg border border-button-border text-white rounded-r transition duration-200 ease-in-out hover:brightness-200"
+                                    className="px-4 py-2 bg-button-bg border border-button-border text-white rounded-r transition duration-200 ease-in-out hover:brightness-200 w-1/3"
                                 >
                                     검색
                                 </button>
                             </form>
-                            {searchQuery && allRooms.length === 0 && <p className="text-custom-text">검색 결과가 없습니다.</p>}
-                        </div>
-
-                        {/* 사용자가 생성한 방 목록 */}
-                        <div className={`bg-custom-bg p-6 rounded border border-button-border ${styles.roomList}`}>
-                            <h2 className="text-xl font-semibold mb-4 text-custom-text">내가 생성한 방들</h2>
-                            {userRooms.length === 0 ? (
-                                <p className="text-custom-text">생성한 방이 없습니다.</p>
-                            ) : (
-                                <ul>
-                                    {userRooms.map((room) => (
-                                        <li key={room.id} className={`flex justify-between items-center mb-2 ${styles.roomItem}`}>
-                                            <span className="text-custom-text">{room.name} ({room.id})</span>
-                                            <button
-                                                className={`px-2 py-1 bg-button-bg border border-button-border text-white rounded transition duration-200 ease-in-out hover:brightness-200 ${styles.deleteButton}`}
-                                                onClick={() => handleDeleteRoom(room.id)}
-                                            >
-                                                삭제
-                                            </button>
-                                        </li>
-                                    ))}
-                                </ul>
+                            {searchQuery && allRooms.length === 0 && (
+                                <div className="flex justify-center items-center h-24">
+                                    <p className="text-custom-text">검색 결과가 없습니다.</p>
+                                </div>
                             )}
                         </div>
 
-                        {/* 모든 방 목록 */}
-                        <div className={`bg-custom-bg p-6 rounded border border-button-border ${styles.roomList}`}>
+                        {/* 오른쪽 아래 섹션: 모든 방들 */}
+                        <div className={`bg-custom-bg p-6 rounded border border-button-border ${styles.rightBottomSection}`}>
                             <h2 className="text-xl font-semibold mb-4 text-custom-text">모든 방들</h2>
                             {allRooms.length === 0 ? (
                                 <p className="text-custom-text">현재 활성화된 방이 없습니다.</p>
                             ) : (
                                 <ul>
                                     {allRooms.map((room) => (
-                                        <li key={room.id} className={`flex justify-between items-center mb-2 ${styles.roomItem}`}>
-                                            <div className="text-custom-text">
+                                        <li key={room.id} className={`flex justify-between items-center mb-2 ${styles.roomItem_right
+                                            }`}>
+                                            <div className="flex-1 mr-4 text-custom-text truncate">
                                                 <span className="font-semibold">{room.name}</span> ({room.id}) - {room.category}
                                                 {room.isPrivate && " 🔒"}
                                                 {room.creatorNickname && ` - 생성자: ${room.creatorNickname}`}

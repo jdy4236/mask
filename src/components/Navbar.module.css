@@ -11,16 +11,22 @@
     /* 주 테두리 색상 */
 }
 
+/* 로고를 오른쪽으로 약간 이동 */
 .logo {
     color: #ffffff;
     font-size: 1.5rem;
     font-weight: bold;
+    margin-left: 220px;
+    /* 원하는 만큼 조정 (예: 0.5rem = 8px) */
 }
 
+/* 인사말과 로그아웃 버튼을 왼쪽으로 약간 이동 */
 .navItems {
     display: flex;
     align-items: center;
     gap: 16px;
+    margin-right: 220px;
+    /* 원하는 만큼 조정 (예: 0.5rem = 8px) */
 }
 
 .greeting {

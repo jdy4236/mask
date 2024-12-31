@@ -6,9 +6,9 @@ import { Server } from 'socket.io';
 import next from 'next';
 import dotenv from 'dotenv';
 import prisma from './src/lib/prisma.js'; // ESM에서는 파일 확장자 명시 필요
-import bcrypt from 'bcrypt';
 import { authenticate } from './src/lib/auth.js'; // ESM에서는 파일 확장자 명시 필요
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt'; // bcrypt 추가
 
 dotenv.config(); // 환경 변수 로드
 
@@ -60,7 +60,7 @@ app.prepare().then(() => {
                         socket.emit('error', { message: '비밀방 비밀번호가 필요합니다.' });
                         return;
                     }
-                    const isPasswordValid = await bcrypt.compare(password, room.password);
+                    const isPasswordValid = password === room.password; // 비밀번호 직접 비교
                     if (!isPasswordValid) {
                         socket.emit('error', { message: '비밀번호가 틀렸습니다.' });
                         return;
@@ -176,6 +176,10 @@ app.prepare().then(() => {
 
         // 비밀방 비밀번호 검증 이벤트
         socket.on('verifyRoomPassword', async ({ roomId, password }) => {
+
+            console.log("##### roomId : " + roomId);
+            console.log("##### password : " + password);
+
             try {
                 const room = await prisma.room.findUnique({
                     where: { id: roomId },
@@ -196,7 +200,7 @@ app.prepare().then(() => {
                     return;
                 }
 
-                const isPasswordValid = await bcrypt.compare(password, room.password);
+                const isPasswordValid = password === room.password; // 비밀번호 직접 비교
 
                 if (isPasswordValid) {
                     socket.emit('passwordVerification', { success: true, message: '비밀번호가 일치합니다.' });
