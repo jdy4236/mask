@@ -2,6 +2,7 @@
 
 import prisma from '@/lib/prisma.js';
 import { authenticate } from '@/lib/auth.js';
+import eventEmitter from '@/lib/eventEmitter.js'; // 이벤트 익스포터 임포트
 
 export async function POST(request) {
     const authHeader = request.headers.get("Authorization");
@@ -36,6 +37,10 @@ export async function POST(request) {
                 createdBy: user.userId, // Fix here
             },
         });
+
+        console.log("방 생성 완료. roomChanged 이벤트 발생.");
+        // 방 생성 후 이벤트 발행
+        eventEmitter.emit('roomChanged');
 
         return new Response(JSON.stringify({ room: newRoom }), { status: 201 });
     } catch (error) {

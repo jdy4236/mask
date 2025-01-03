@@ -1,26 +1,29 @@
 // src/lib/auth.js
 
 import jwt from 'jsonwebtoken';
-import prisma from './prisma.js'; // Prisma 클라이언트 임포트
+import prisma from './prisma.js';
 
 export async function authenticate(token) {
-    if (!token) {
-        console.log("No token provided");
-        return null;
-    }
+    if (!token) return null;
+
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const user = await prisma.user.findUnique({
             where: { id: decoded.userId },
-            select: { id: true, nickname: true },
+            select: { id: true, nickname: true, role: true }, // role 포함
         });
-        if (!user) {
-            console.log("User not found");
-            return null;
+
+        if (user) {
+            return {
+                userId: user.id, // 'userId' 필드 추가
+                nickname: user.nickname,
+                role: user.role,
+            };
         }
-        return { userId: user.id, nickname: user.nickname };
+
+        return null;
     } catch (error) {
-        console.error("Authentication failed:", error.message);
+        console.error("Authentication error:", error);
         return null;
     }
 }

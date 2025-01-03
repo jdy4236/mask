@@ -2,6 +2,7 @@
 
 import prisma from '@/lib/prisma.js';
 import { authenticate } from '@/lib/auth.js';
+import eventEmitter from '@/lib/eventEmitter.js'; // 이벤트 익스포터 임포트
 
 export async function DELETE(request) {
     const authHeader = request.headers.get("Authorization");
@@ -28,6 +29,10 @@ export async function DELETE(request) {
 
         // 방 삭제
         await prisma.room.delete({ where: { id: roomId } });
+
+        console.log("방 삭제 완료. roomChanged 이벤트 발생.");
+        // 방 삭제 후 이벤트 발행
+        eventEmitter.emit('roomChanged');
 
         return new Response(JSON.stringify({ success: true }), { status: 200 });
     } catch (error) {
